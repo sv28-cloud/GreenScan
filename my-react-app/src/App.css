@@ -1,42 +1,190 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* 🌿 GreenScan – Clean Forest Style */
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: url('/last.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #e6f4ea;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h1 {
+  font-size: 2.5rem;
+  color: #e8fce8;
+  margin-top: 2rem;
+  font-weight: 600;
+  text-shadow: 0 2px 6px rgba(1, 76, 76, 0.4);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+button {
+  background-color: #2e7d32;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  margin: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #43a047;
+  transform: scale(1.05);
+}
+
+input[type="file"] {
+  background: rgba(255, 255, 255, 0.2);
+  color: #e6f4ea;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+img {
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  margin: 20px 0;
+  max-width: 300px;
+}
+
+/* 🟩 Result Box */
+.result-box {
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 16px;
+  width: 60%;
+  max-width: 600px;
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.result-box.animate {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* ♻️ Recyclable (Green Glow) */
+.result-box.recycle {
+  background: rgba(50, 129, 70, 0.85);
+  border: 3px solid #81c784;
+  box-shadow: 0 0 25px rgba(129, 199, 132, 0.6);
+  animation: pulseGreen 1.5s ease-in-out infinite alternate;
+}
+
+/* 🚫 Not Recyclable (Red Glow) */
+.result-box.not-recycle {
+  background: rgba(183, 28, 28, 0.85);
+  border: 3px solid #ef5350;
+  box-shadow: 0 0 25px rgba(239, 83, 80, 0.6);
+  animation: pulseRed 1.2s ease-in-out infinite alternate;
+}
+
+.icon-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-top: 15px;
+}
+
+.icon-large {
+  width: 120px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.icon-large:hover {
+  transform: scale(1.1);
+}
+
+/* 🟢 Small single icon style */
+.icon {
+  width: 150px;
+  height: auto;
+  margin-top: 15px;
+}
+
+/* 📘 Explanation text */
+.explanation {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #e8fce8;
+  margin-top: 15px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* ✨ Animations */
+@keyframes pulseRed {
+  0% { box-shadow: 0 0 20px rgba(239, 83, 80, 0.5); }
+  100% { box-shadow: 0 0 40px rgba(239, 83, 80, 0.9); }
+}
+
+@keyframes pulseGreen {
+  0% { box-shadow: 0 0 20px rgba(129, 199, 132, 0.5); }
+  100% { box-shadow: 0 0 40px rgba(129, 199, 132, 0.9); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.slide-up {
+  opacity: 0;
+  animation: slideUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+.slide-up-delayed {
+  opacity: 0;
+  animation: slideUp 1s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+/* Fade-in for uploaded image preview */
+.fade-in-delayed {
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+  animation-delay: 0.6s;
+}
+
+/* Gentle floating motion for result box */
+.float {
+  animation: fadeIn 0.6s ease-in-out, float 4s ease-in-out infinite;
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  to {
-    transform: rotate(360deg);
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
 }
 
-.card {
-  padding: 2em;
+a {
+  text-decoration: none;
+  color: #a5d6a7;
 }
 
-.read-the-docs {
-  color: #888;
+a:hover {
+  color: #c8e6c9;
 }
