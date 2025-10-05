@@ -17,41 +17,67 @@ function App() {
   };
 
   const analyzeImage = async () => {
-    if (!image) return;
+    if (!image) {
+      console.warn("⚠️ No image selected.");
+      return;
+    }
+
+    console.log("🟡 Starting image analysis...");
     setLoading(true);
     setResult("");
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     const reader = new FileReader();
+
     reader.onloadend = async () => {
-      const base64Data = reader.result.split(",")[1];
-      const prompt =
-        "Classify this item as recyclable or not recyclable and explain why in one or two sentences.";
+      console.log("📸 Image loaded into base64, sending to Flask backend...");
 
       try {
-        const response = await model.generateContent([
-          prompt,
-          {
-            inlineData: { mimeType: image.type, data: base64Data },
-          },
-        ]);
+        // --- 1️⃣ Send image to Flask backend ---
+        const formData = new FormData();
+        formData.append("file", image);
 
-        const text = response.response.text();
-        setResult(text);
+        console.log("📤 Sending POST request to Flask backend...");
+        const flaskResponse = await fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          body: formData,
+        });
 
-        // Detect recyclable vs not recyclable
-        if (
-          text.toLowerCase().includes("recyclable") &&
-          !text.toLowerCase().includes("not recyclable")
-        ) {
+        console.log("🛰️ Flask response status:", flaskResponse.status);
+
+        if (!flaskResponse.ok) {
+          const errorText = await flaskResponse.text();
+          console.error("❌ Flask error response:", errorText);
+          throw new Error("Backend returned an error");
+        }
+
+        const flaskData = await flaskResponse.json();
+        console.log("✅ Flask returned JSON:", flaskData);
+
+        const predictedClass = flaskData.prediction || flaskData.predicted_class;
+
+        if (!predictedClass) {
+          console.error("⚠️ No predicted class found in Flask response");
+          setResult("Error: No prediction returned from backend.");
+          return;
+        }
+
+        console.log("🧠 Backend predicted class:", predictedClass);
+        setResult(`Predicted: ${predictedClass}`);
+
+        // --- 2️⃣ Decide recyclable or not ---
+        const lower = predictedClass.toLowerCase();
+        if (["plastic", "paper", "glass", "metal", "cardboard"].some((m) => lower.includes(m))) {
+          console.log("♻️ Marked as recyclable (based on backend prediction)");
           setIsRecyclable(true);
         } else {
+          console.log("🚫 Marked as NOT recyclable (based on backend prediction)");
           setIsRecyclable(false);
         }
       } catch (err) {
-        setResult("Sorry, I couldn’t analyze this image.");
+        console.error("❌ Error during analysis:", err);
+        setResult("Sorry, something went wrong while analyzing the image.");
       } finally {
+        console.log("✅ Done. Resetting loading state.");
         setLoading(false);
       }
     };

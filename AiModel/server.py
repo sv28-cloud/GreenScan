@@ -7,6 +7,8 @@ import torch
 import torchvision.models as models
 import torchvision.transforms as transforms
 from PIL import Image
+from flask_cors import CORS
+
 
 # -------------------------
 # 1️⃣ Load your model + label encoder
@@ -49,22 +51,46 @@ def get_embedding(image):
 # 3️⃣ Create Flask app
 # -------------------------
 app = Flask(__name__)
+CORS(app)
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    print("📩 /predict endpoint hit")
+
     if "file" not in request.files:
+        print("❌ No file field in request.files")
         return jsonify({"error": "No file uploaded"}), 400
 
     file = request.files["file"]
-    image = Image.open(file).convert("RGB")
+    print(f"✅ Received file: {file.filename}, Content-Type: {file.content_type}")
+
+    try:
+        # Try to open the image
+        image = Image.open(file).convert("RGB")
+        print("🖼️ Image successfully opened and converted to RGB")
+    except Exception as e:
+        print(f"❌ Error opening image: {e}")
+        return jsonify({"error": "Invalid image format"}), 400
 
     # Get embedding
-    embedding = get_embedding(image).reshape(1, -1)
+    try:
+        embedding = get_embedding(image).reshape(1, -1)
+        print(f"🔍 Embedding shape: {embedding.shape}")
+    except Exception as e:
+        print(f"❌ Error getting embedding: {e}")
+        return jsonify({"error": "Embedding failed"}), 500
 
     # Predict class
-    pred_id = clf.predict(embedding)[0]
-    pred_class = label_encoder.inverse_transform([pred_id])[0]
+    try:
+        pred_id = clf.predict(embedding)[0]
+        pred_class = label_encoder.inverse_transform([pred_id])[0]
+        print(f"✅ Prediction complete — class ID: {pred_id}, label: {pred_class}")
+    except Exception as e:
+        print(f"❌ Error predicting: {e}")
+        return jsonify({"error": "Prediction failed"}), 500
 
+    print("🚀 Returning response to frontend\n")
     return jsonify({"predicted_class": pred_class})
 
 # -------------------------
