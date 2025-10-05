@@ -60,11 +60,11 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div className="app fade-in">
       <div className="overlay"></div>
-      <h1 className="title">♻️ GreenScan – AI Recycling Assistant</h1>
+      <h1 className="title slide-up"> ♻️ GreenScan – AI Recycling Assistant</h1>
 
-      <div className="card">
+      <div className="card slide-up-delayed">
         <input
           type="file"
           accept="image/*"
@@ -77,7 +77,7 @@ function App() {
         </button>
 
         {image && (
-          <div className="preview">
+          <div className="preview fade-in-delayed">
             <h3>Uploaded Image:</h3>
             <img src={URL.createObjectURL(image)} alt="preview" />
           </div>

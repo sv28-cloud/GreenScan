@@ -18,7 +18,7 @@ h1 {
   color: #e8fce8;
   margin-top: 2rem;
   font-weight: 600;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 6px rgba(1, 76, 76, 0.4);
 }
 
 button {
@@ -73,7 +73,7 @@ img {
 
 /* ♻️ Recyclable (Green Glow) */
 .result-box.recycle {
-  background: rgba(46, 125, 50, 0.85);
+  background: rgba(50, 129, 70, 0.85);
   border: 3px solid #81c784;
   box-shadow: 0 0 25px rgba(129, 199, 132, 0.6);
   animation: pulseGreen 1.5s ease-in-out infinite alternate;
@@ -87,7 +87,6 @@ img {
   animation: pulseRed 1.2s ease-in-out infinite alternate;
 }
 
-/* 🔁 Icon Row (for multiple icons side by side) */
 .icon-row {
   display: flex;
   justify-content: center;
@@ -138,6 +137,47 @@ img {
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
+}
+
+.slide-up {
+  opacity: 0;
+  animation: slideUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+.slide-up-delayed {
+  opacity: 0;
+  animation: slideUp 1s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+/* Fade-in for uploaded image preview */
+.fade-in-delayed {
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+  animation-delay: 0.6s;
+}
+
+/* Gentle floating motion for result box */
+.float {
+  animation: fadeIn 0.6s ease-in-out, float 4s ease-in-out infinite;
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
 }
 
 a {
